@@ -1,0 +1,42 @@
+## Input Data Schema
+
+# feature id: feature name
+# The order must be consistent with the raw data.
+# First field is the label. Case insensitive here.
+
+1: clk
+2: f11  # USER  uin                2   UNKOWN;
+3: f16  # USER    begid               2   UNKOWN;
+4: f60  # USER    device_id           2   UNKOWN;
+5: f20147  # USER    up_age              1   new_bucket[-1,10,15,20,25,30,35,40,50,55,1000];
+6: f61  # USER    up_sex              2   UNKOWN;
+7: f58  # USER    up_video_recent24_page_subcategory_click   11  top[5];
+8: f56  # USER    up_video_recent24_page_tag_click       11  top[20];
+9: f54  # USER    up_video_recent_page_ctype_click       11  top[5];
+10: f55  # USER    up_video_recent_page_ctype_unclick     11  top[5];
+11: f52  # USER    up_video_recent_page_tag_click         11  top[5];
+12: f48  # USER    up_video_subcategories  11   top[5];
+13: f46  # USER    up_video_tags           11   top[20];
+14: f50  # USER    up_video_ctypes         11   top[5];
+15: f20164  # USER    short_history_pos_vid   2 UNKOWN;
+16: f20165  # USER    short_history_pos_mediaid   2 UNKOWN;
+17: f10033  # DOC     tt_tag_hash         11  top[5];
+18: f10037  # DOC     vid                 2   UNKOWN;
+19: f10038  # DOC     video_ctype         2   UNKOWN;
+20: f10047  # DOC     video_media_id      2   UNKOWN;
+21: f10035  # DOC     video_sub_category  2   UNKOWN;
+22: f64  # DOC     page_idx            2   UNKOWN;
+23: f20145  # DOC     followed            1   udf_new_video_user_doc_tagmatch;
+24: f20007  # CROSS   device_id_video_ctype  21  device_id,video_ctype;
+25: f20010  # CROSS   device_id_video_sub_category  21  device_id,video_sub_category;
+26: f75  # CROSS   up_sex_age             21  up_sex,up_age_new_bucket;
+27: f20053  # CROSS   sex_age_video_ctype          21  up_sex,up_age_new_bucket,video_ctype;
+28: f20059  # CROSS   sex_age_video_sub_category   21  up_sex,up_age_new_bucket,video_sub_category;
+29: f20069  # CROSS   up_video_ctypes_video_ctype  21  up_video_ctypes,video_ctype;
+30: f20068  # CROSS   up_video_ctypes_mediaid      21  up_video_ctypes,video_media_id;
+31: f20154  # CROSS   up_video_subcategories_video_media_id      21 up_video_subcategories,video_media_id;
+32: f20093  # CROSS   up_video_subcategories_video_sub_category  21  up_video_subcategories,video_sub_category;
+33: f20072  # CROSS   up_video_recent24_page_subcategory_click_video_media_id      21 up_video_recent24_page_subcategory_click,video_media_id;
+34: f20074  # CROSS   up_video_recent24_page_subcategory_click_video_sub_category  21  up_video_recent24_page_subcategory_click,video_sub_category;
+35: f20081  # CROSS   up_video_recent_page_ctype_click_video_ctype            21  up_video_recent_page_ctype_click,video_ctype;
+36: f20164len  # sequence_length

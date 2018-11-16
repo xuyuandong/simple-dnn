@@ -1,0 +1,259 @@
+## Feature Configuration
+
+# Using tf.feature_column in TensorFlow.
+# see https://www.tensorflow.org/api_docs/python/tf/feature_column
+
+# Each feature consists 3 attributes `type`, `transform`, `parameter`.
+# 1. feature: feature name required, must in schema.yaml.
+# 2. type: required, feature type, `category` or `continuous`.
+# 3. transform: feature transform.
+# 4. parameter: main parameter for transform.
+#    (1) type: category
+#         transform: `hash_bucket` or `vocab` or `identity`.
+#           hash_bucket  ==> tf.feature.categorical_column_with_hash_bucket
+#           vocab        ==> tf.feature.categorical_column_with_vocabulary_list
+#           identity     ==> tf. feature.categorical_column_with_identity
+#         parameter: examples as follows,
+#           1000            (hash_bucket_size  for `hash_bucket`)
+#           ['a', 'b', 'c'] (vocabulary_list for `vocab`)
+#           15              (num_buckets  for `identity`)
+#    (2) type: continuous
+#         transform: `min_max`, `log`, `standard` normalization for normalizer_fn in
+#                    tf.feature_column.numeric_column, set empty to not do normalization.
+#           `min_max`    ==> x = (x-min) / (x-max);
+#           `log`        ==> x = log(x), all feature values must >= 1
+#           `standard`   ==> x = (x-mean) / std
+#
+#         parameter:
+#           normalization: [min, max] or [mean, std] list for `min_max` or `standard`; set empty for `log`.
+#           boundaries: optional, set boundaries, eg: [5, 10, 15, 20] for `discretize`
+#                       (bucketized continuous feature for wide input or as cross feature),
+#                       set empty for not use continuous feature for wide input.
+# Set unused features by using symbol `#` ahead of the lines.
+# Category features with hash_bucket using embedding_column to feed deep, others by indicator_column.
+# All listed features are used in model.
+
+
+# Q & A about hash_bucket_size:
+# If category size=1000, how much should hash_bucket_size be ?
+#   An interesting discovery is that randomly chose N number a_i between 1~N, i=1,...N
+#     let b_i = a_i % N, the distinct b_i from all N number is about 0.633.
+#     in other words, a random hash func chose N as hash_bucket_size collision rate is 0.633.
+#   Recommend `hash_bucket_size` to be 2~3*category size.
+#     larger `hash_bucket_size` require more memory and complexity, but smaller cause more collision
+#   Here use the strategy that
+#     for low sparsity category, set `hash_bucket_size` 3~4*category size to reduce collision
+#     for high sparsity category, set 1.5~2*category size to save memory.
+
+# TODO: support all tf.feature_column.
+
+##  uin 2 UNKOWN;
+f11:
+  type: category
+  transform: hash_bucket
+  parameter: 1000000
+
+##  begid 2 UNKOWN;
+f16:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  device_id 2 UNKOWN;
+f60:
+  type: category
+  transform: hash_bucket
+  parameter: 10
+
+##  up_age 1 new_bucket[-1,10,15,20,25,30,35,40,50,55,1000];
+f20147:
+  type: category
+  transform: hash_bucket
+  parameter: 20
+
+##  up_sex 2 UNKOWN;
+f61:
+  type: category
+  transform: hash_bucket
+  parameter: 10
+
+##  up_video_recent24_page_subcategory_click 11 top[5];
+f58:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  up_video_recent24_page_tag_click 11 top[20];
+f56:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  up_video_recent_page_ctype_click 11 top[5];
+f54:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  up_video_recent_page_ctype_unclick 11 top[5];
+f55:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  up_video_recent_page_tag_click 11 top[5];
+f52:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  up_video_subcategories 11 top[5];
+f48:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  up_video_tags 11 top[20];
+f46:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  up_video_ctypes 11 top[5];
+f50:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  short_history_pos_vid 2 UNKOWN;
+f20164:
+  type: category
+  transform: identity
+  parameter: 100000
+
+##  short_history_pos_mediaid 2 UNKOWN;
+f20165:
+  type: category
+  transform: hash_bucket
+  parameter: 100000
+
+##  tt_tag_hash 11 top[5];
+f10033:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  vid 2 UNKOWN;
+f10037:
+  type: category
+  transform: hash_bucket
+  parameter: 100000
+
+##  video_ctype 2 UNKOWN;
+f10038:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  video_media_id 2 UNKOWN;
+f10047:
+  type: category
+  transform: hash_bucket
+  parameter: 100000
+
+##  video_sub_category 2 UNKOWN;
+f10035:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  page_idx 2 UNKOWN;
+f64:
+  type: category
+  transform: hash_bucket
+  parameter: 10
+
+##  followed 1 udf_new_video_user_doc_tagmatch;
+f20145:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  device_id_video_ctype 21 device_id,video_ctype;
+f20007:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  device_id_video_sub_category 21 device_id,video_sub_category;
+f20010:
+  type: category
+  transform: hash_bucket
+  parameter: 1000
+
+##  up_sex_age 21 up_sex,up_age_new_bucket;
+f75:
+  type: category
+  transform: hash_bucket
+  parameter: 100
+
+##  sex_age_video_ctype 21 up_sex,up_age_new_bucket,video_ctype;
+f20053:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  sex_age_video_sub_category 21 up_sex,up_age_new_bucket,video_sub_category;
+f20059:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  up_video_ctypes_video_ctype 21 up_video_ctypes,video_ctype;
+f20069:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  up_video_ctypes_mediaid 21 up_video_ctypes,video_media_id;
+f20068:
+  type: category
+  transform: hash_bucket
+  parameter: 100000
+
+##  up_video_subcategories_video_media_id 21 up_video_subcategories,video_media_id;
+f20154:
+  type: category
+  transform: hash_bucket
+  parameter: 100000
+
+##  up_video_subcategories_video_sub_category 21 up_video_subcategories,video_sub_category;
+f20093:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  up_video_recent24_page_subcategory_click_video_media_id 21 up_video_recent24_page_subcategory_click,video_media_id;
+f20072:
+  type: category
+  transform: hash_bucket
+  parameter: 100000
+
+##  up_video_recent24_page_subcategory_click_video_sub_category 21 up_video_recent24_page_subcategory_click,video_sub_category;
+f20074:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+##  up_video_recent_page_ctype_click_video_ctype 21 up_video_recent_page_ctype_click,video_ctype;
+f20081:
+  type: category
+  transform: hash_bucket
+  parameter: 10000
+
+  
+##  sequence length
+f20164len:
+  type: category
+  transform: identity
+  parameter: 20

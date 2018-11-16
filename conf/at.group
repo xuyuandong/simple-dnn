@@ -1,0 +1,40 @@
+11:16:1000000 USER  uin                2   UNKOWN;
+16:1000 USER    begid               2   UNKOWN;
+60:16:10 USER    device_id           2   UNKOWN;
+20147:16:20 USER    up_age              1   new_bucket[-1,10,15,20,25,30,35,40,50,55,1000];
+61:16:10 USER    up_sex              2   UNKOWN;
+58:16:1000 USER    up_video_recent24_page_subcategory_click   11  top[5];
+56:16:10000 USER    up_video_recent24_page_tag_click       11  top[20];
+54:16:1000 USER    up_video_recent_page_ctype_click       11  top[5];
+55:16:1000 USER    up_video_recent_page_ctype_unclick     11  top[5];
+52:16:10000 USER    up_video_recent_page_tag_click         11  top[5];
+
+48:16:1000 USER    up_video_subcategories  11   top[5];
+46:16:10000 USER    up_video_tags           11   top[20];
+50:16:1000 USER    up_video_ctypes         11   top[5];
+
+20164:16:100000 USER    short_history_pos_vid   2 UNKOWN;
+20165:16:100000 USER    short_history_pos_mediaid   2 UNKOWN;
+
+10033:16:10000 DOC     tt_tag_hash         11  top[5];
+10037:16:100000 DOC     vid                 2   UNKOWN;
+10038:16:1000 DOC     video_ctype         2   UNKOWN;
+10047:16:100000 DOC     video_media_id      2   UNKOWN;
+10035:16:1000 DOC     video_sub_category  2   UNKOWN;
+
+64:10 DOC     page_idx            2   UNKOWN;
+20145:16:10000 DOC     followed            1   udf_new_video_user_doc_tagmatch;
+
+20007:16:1000 CROSS   device_id_video_ctype  21  device_id,video_ctype;
+20010:16:1000 CROSS   device_id_video_sub_category  21  device_id,video_sub_category;
+75:16:100 CROSS   up_sex_age             21  up_sex,up_age_new_bucket;
+20053:16:10000 CROSS   sex_age_video_ctype          21  up_sex,up_age_new_bucket,video_ctype;
+20059:16:10000 CROSS   sex_age_video_sub_category   21  up_sex,up_age_new_bucket,video_sub_category;
+20069:10000 CROSS   up_video_ctypes_video_ctype  21  up_video_ctypes,video_ctype;
+20068:100000 CROSS   up_video_ctypes_mediaid      21  up_video_ctypes,video_media_id;
+20154:100000 CROSS   up_video_subcategories_video_media_id      21 up_video_subcategories,video_media_id;
+20093:10000 CROSS   up_video_subcategories_video_sub_category  21  up_video_subcategories,video_sub_category;
+20072:100000 CROSS   up_video_recent24_page_subcategory_click_video_media_id      21 up_video_recent24_page_subcategory_click,video_media_id;
+20074:10000 CROSS   up_video_recent24_page_subcategory_click_video_sub_category  21  up_video_recent24_page_subcategory_click,video_sub_category;
+20081:10000 CROSS   up_video_recent_page_ctype_click_video_ctype            21  up_video_recent_page_ctype_click,video_ctype;
+
