@@ -19,8 +19,8 @@ def read_conf(fname):
                 break
     return order
 
-sequence_len = 20
-sequence_ids = {'f20164':100000}
+max_sequence_len = 20
+sequence_ids = {'f20164':100000, 'f20165':100000}
 
 if __name__ == '__main__':
     order = read_conf(sys.argv[1])
@@ -47,7 +47,7 @@ if __name__ == '__main__':
                 fd[sid] = []
                 for i in range(slen):
                     fd[sid].append('%d'%(int(raw_seq[i]) % hash_space))
-            for i in range(sequence_len - slen):
+            for i in range(max_sequence_len - slen):
                 fd[sid].append('0')
             fd[sid + 'len'] = [str(slen)]
 

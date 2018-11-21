@@ -40,3 +40,4 @@
 34: f20074  # CROSS   up_video_recent24_page_subcategory_click_video_sub_category  21  up_video_recent24_page_subcategory_click,video_sub_category;
 35: f20081  # CROSS   up_video_recent_page_ctype_click_video_ctype            21  up_video_recent_page_ctype_click,video_ctype;
 36: f20164len  # sequence_length
+37: f20165len  # sequence_length

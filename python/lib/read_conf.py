@@ -54,7 +54,7 @@ class Config(object):
         if feature not in valid_feature_name:
             raise ValueError("Invalid feature name `{}` in feature conf, "
                              "must be consistent with schema conf".format(feature))
-        assert type_ in {'category', 'continuous'}, (
+        assert type_ in {'category', 'continuous', 'sequence'}, (
             "Invalid type `{}` for feature `{}` in feature conf, "
             "must be 'category' or 'continuous'".format(type_, feature))
         # check transform and parameter
@@ -70,6 +70,8 @@ class Config(object):
                 if not isinstance(param, (tuple, list)):
                     raise TypeError('Invalid parameter `{}` for feature `{}` in feature conf, '
                                     'vocab parameter must be a list.'.format(param, feature))
+        elif type_ == 'sequence':
+            continue #TODO
         else:
             normalization, boundaries = param['normalization'], param['boundaries']
             if trans:
@@ -234,6 +236,8 @@ class Config(object):
             return [feature for feature, conf in feature_conf_dic.items() if conf['type'] == 'category']
         elif feature_type == 'continuous':
             return [feature for feature, conf in feature_conf_dic.items() if conf['type'] == 'continuous']
+        elif feature_type == 'sequence':
+            return [feature for feature, conf in feature_conf_dic.items() if conf['type'] == 'sequence']
         else:
             raise ValueError("Invalid parameter, must be one of 'all', 'used', 'category, 'continuous")
 
