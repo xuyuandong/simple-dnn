@@ -44,7 +44,7 @@ train:
   dynamic_train: false
   train_epochs: 5
   epochs_per_eval: 1
-  batch_size: 64
+  batch_size: 4
   keep_train: 0
   checkpoint_path:
   # dataset related

@@ -142,6 +142,8 @@ class _CsvDataset(_CTRDataset):
                         # input must be rank 1, return SparseTensor
                         # print(st.values)  # <tf.Tensor 'StringSplit_11:1' shape=(?,) dtype=string>
                         features[f] = tf.string_split([tensor], multivalue_delim).values  # tensor shape (?,)
+                        if f == 'f20164' or f == 'f20164len':
+                            features[f] = tf.string_to_number(features[f], tf.int32)
                     else:
                         #TODO:
                         features[f] = tf.expand_dims(tensor, 0)  # change shape from () to (1,)

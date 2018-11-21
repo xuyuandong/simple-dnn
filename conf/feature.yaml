@@ -128,7 +128,7 @@ f50:
 ##  short_history_pos_vid 2 UNKOWN;
 f20164:
   type: category
-  transform: identity
+  transform: hash_bucket
   parameter: 100000
 
 ##  short_history_pos_mediaid 2 UNKOWN;
@@ -255,5 +255,5 @@ f20081:
 ##  sequence length
 f20164len:
   type: category
-  transform: identity
+  transform: hash_bucket
   parameter: 20
