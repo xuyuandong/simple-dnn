@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/2/7
 """
 TensorFlow Custom Estimators for Wide and Deep Joint Training Models.
 
@@ -52,6 +50,8 @@ _dnn_decay_rate = CONF['dnn_decay_rate'] or 1
 _batch_size = Config().train['batch_size']
 _num_examples = Config().train['num_examples']
 decay_steps = _num_examples / _batch_size
+        
+_feature_sequence = Config().get_feature_name('sequence')  # sequence features
 
 
 def _wide_deep_combined_model_fn(
@@ -116,12 +116,11 @@ def _wide_deep_combined_model_fn(
         staircase=False)
 
     #TODO:
-    with_sequence = True
     seq_features = None
-    if with_sequence:
+    if len(_feature_sequence) > 1:
         try:  # separate sequence feature from input_fn
-            seq_features = {'f20164': features.pop('f20164'),
-                    'f20164len': features.pop('f20164len')}
+            seq_features= { fkey : features.pop(fkey) for fkey in _feature_sequence }
+            #print (seq_features)
         except KeyError:
             raise ValueError('No input sequence features, f20164, f20165 if with_sequence.')
 

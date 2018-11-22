@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/2/9
 """This module is based on tf.estimator.DNNClassifier.
 Dnn logits builder. 
 Extend dnn architecture, add BN layer, add Regularization, add activation function options, add arbitrary connections between layers.
@@ -22,7 +20,7 @@ sys.path.insert(0, PACKAGE_DIR)
 
 from lib.read_conf import Config
 from lib.utils.model_util import add_layer_summary, get_optimizer_instance, activation_fn
-from lib.sequence import SequenceModel, SequenceModel2
+from lib.sequence import SequenceModel
 
 CONF = Config().model
 ACTIVATION_FN = activation_fn(CONF['dnn_activation_function'])
@@ -97,8 +95,9 @@ def _dnn_logit_fn(features, seq_features, mode, model_id, units,
     if seq_features is None:
         input_layer = net
     else:
-        seq_net = SequenceModel2().build(seq_features, input_layer_partitioner = input_layer_partitioner)
-        input_layer = tf.concat([net, seq_net], 1)
+        seq_nets = SequenceModel().build(seq_features, input_layer_partitioner = input_layer_partitioner)
+        seq_nets.append(net)
+        input_layer = tf.concat(seq_nets, 1)
 
 
     if connected_mode == 'simple':

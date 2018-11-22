@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/1/15
 """
 Build feature columns using tf.feature_column API.
 Build estimator using tf.estimator API and custom API (defined in lib module)
@@ -77,10 +75,8 @@ def _build_model_columns():
         f_type, f_tran, f_param = conf["type"], conf["transform"], conf["parameter"]
 
         #TODO:
-        with_sequence = True
-        if with_sequence:
-            if feature in ['f20164', 'f20164len']:
-                continue
+        if f_type == 'sequence':
+            continue
 
         if f_type == 'category':
 

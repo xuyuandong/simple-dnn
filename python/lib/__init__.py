@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/3/12
 """lib is a python package
 
 when use absolute import in package, can not execute file directly (ImportError)

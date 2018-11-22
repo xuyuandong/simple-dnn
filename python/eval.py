@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/1/15
 """Wide and Deep Model Evaluation"""
 from __future__ import absolute_import
 from __future__ import division

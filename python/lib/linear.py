@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/2/9
 """This module is based on tf.estimator.LinearClassifier.
 linear logits builder for wide part"""
 # TODO: add FM as linear part

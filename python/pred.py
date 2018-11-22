@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/2/2
 """Wide and Deep Model Prediction
 Not support for custom classifier, cause use different variable name scope, key not found in checkpoint"""
 from __future__ import absolute_import

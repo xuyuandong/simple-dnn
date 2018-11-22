@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/3/5
 """This module contains some model build related utility functions"""
 from __future__ import absolute_import
 from __future__ import division

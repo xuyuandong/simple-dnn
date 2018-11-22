@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/1/24
 """Read All Configuration from wide_deep/conf/*.yaml"""
 import os
 import yaml
@@ -71,7 +69,7 @@ class Config(object):
                     raise TypeError('Invalid parameter `{}` for feature `{}` in feature conf, '
                                     'vocab parameter must be a list.'.format(param, feature))
         elif type_ == 'sequence':
-            continue #TODO
+            pass  #TODO
         else:
             normalization, boundaries = param['normalization'], param['boundaries']
             if trans:

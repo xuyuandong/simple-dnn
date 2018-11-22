@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author: lapis-hong
-# @Date  : 2018/1/24
 """Parse data and generate input_fn for tf.estimators"""
 from __future__ import absolute_import
 from __future__ import division
@@ -77,6 +75,7 @@ class _CsvDataset(_CTRDataset):
         self._feature = self._conf.get_feature_name()  # all features
         self._feature_used = self._conf.get_feature_name('used')  # used features
         self._feature_unused = self._conf.get_feature_name('unused')  # unused features
+        self._feature_sequence = self._conf.get_feature_name('sequence')  # sequence features
         self._feature_conf = self._conf.read_feature_conf()  # feature conf dict
         self._csv_defaults = self._column_to_csv_defaults()
 
@@ -90,7 +89,7 @@ class _CsvDataset(_CTRDataset):
         for f in self._feature:
             if f in self._feature_conf:  # used features
                 conf = self._feature_conf[f]
-                if conf['type'] == 'category':
+                if conf['type'] == 'category' or conf['type'] == 'sequence':
                     if conf['transform'] == 'identity':  # identity category column need int type
                         csv_defaults[f] = [0]
                     else:
@@ -121,6 +120,7 @@ class _CsvDataset(_CTRDataset):
         pos_w = self._pos_sample_loss_weight
         neg_w = self._neg_sample_loss_weight
         use_weight = self._use_weight
+        sequence_features = self._feature_sequence
 
         def parser(value):
             """Parse train and eval data with label
@@ -142,7 +142,7 @@ class _CsvDataset(_CTRDataset):
                         # input must be rank 1, return SparseTensor
                         # print(st.values)  # <tf.Tensor 'StringSplit_11:1' shape=(?,) dtype=string>
                         features[f] = tf.string_split([tensor], multivalue_delim).values  # tensor shape (?,)
-                        if f == 'f20164' or f == 'f20164len':
+                        if f in sequence_features:
                             features[f] = tf.string_to_number(features[f], tf.int32)
                     else:
                         #TODO:
