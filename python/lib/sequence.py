@@ -8,6 +8,7 @@ import tensorflow as tf
 
 import os
 import sys
+import math
 PACKAGE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PACKAGE_DIR)
 from lib.read_conf import Config
@@ -75,6 +76,27 @@ class BaseSequenceModel(object):
         output = tf.convert_to_tensor(position_enc, dtype=tf.float32)
         return output
 
+    def get_timing_signal_1d(self, length, channels, min_timescale=1.0, max_timescale=1.0e4, start_index=0):
+        """Gets a bunch of sinusoids of different frequencies.
+        Args:
+            length: scalar, length of timing signal sequence.
+            channels: scalar, size of timing embeddings to create. The number of different timescales is equal to channels / 2.
+            min_timescale: a float
+            max_timescale: a float
+            start_index: index of first position
+        Returns:
+            a Tensor of timing signals [1, length, channels]
+        """
+        position = tf.to_float(tf.range(length) + start_index)
+        num_timescales = channels // 2
+        log_timescale_increment = (math.log(float(max_timescale) / float(min_timescale)) / tf.maximum(tf.to_float(num_timescales) - 1, 1))
+        inv_timescales = min_timescale * tf.exp(tf.to_float(tf.range(num_timescales)) * -log_timescale_increment)
+        scaled_time = tf.expand_dims(position, 1) * tf.expand_dims(inv_timescales, 0)
+        signal = tf.concat([tf.sin(scaled_time), tf.cos(scaled_time)], axis=1)
+        signal = tf.pad(signal, [[0, 0], [0, tf.mod(channels, 2)]])
+        signal = tf.reshape(signal, [1, length, channels])
+        return signal
+
     def attention_network(self, fkey, input_seq, vocab_size, input_seq_len, max_len): 
         # input embedding
         embed_dim = 16 #embedding_dim(vocab_size)
@@ -83,9 +105,9 @@ class BaseSequenceModel(object):
         embed_input = tf.nn.embedding_lookup(seq_embedding, input_seq)
        
         # positional encoding
-        embed_pos = self.positional_encoding(max_len, embed_dim)
+        embed_pos = self.get_timing_signal_1d(max_len, embed_dim)
         encoding = tf.add(embed_input, embed_pos)
-        
+
         # input sequence length
         input_seq_len = tf.reshape(input_seq_len, [-1])
 
@@ -97,22 +119,17 @@ class BaseSequenceModel(object):
         with tf.Session() as sess:
             sess.run(tf.initialize_all_variables())
             print ('-----------------------------------')
-            in_op, seq_len, seq_pe, seq_mask, seq_emb = sess.run([input_seq, input_seq_len, embed_pos, embed_input, encoding])
-            print ('input-----------------------------------')
-            print (in_op)
-            print ('seq_len-----------------------------------')
-            print (seq_len)
-            print ('seq_pe-----------------------------------')
+            seq_pe = sess.run([embed_pos])
             print (seq_pe)
-            print ('seq_mask-----------------------------------')
-            print (seq_mask)
-            print ('seq_emb-----------------------------------')
-            print (seq_emb)
+        
         '''
 
         projection = tf.layers.dense(encoding, embed_dim)
         net = self.dot_production_attention(projection, projection, encoding, embed_dim, True)
         return net
+
+
+
 
 
 class SequenceModel(BaseSequenceModel):
